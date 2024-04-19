@@ -1,0 +1,1 @@
+Projekt na przedmiot NAI, dotyczący nawinego algorytmy Bayesa.
