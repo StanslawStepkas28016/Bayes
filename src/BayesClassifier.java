@@ -53,10 +53,88 @@ public class BayesClassifier {
         final List<String> testFileLines = IOUtility.readFromPath(testSetPath);
 
         // Iterowanie przez dane testowe.
-        for (String testLine : testFileLines) {
-            final String[] split = testLine.split(",");
-            // to implement....
+        for (String testFileLine : testFileLines) {
+            final String[] testLine = testFileLine.split(",");
+
+            // Atrybuty wyjściowe.
+            final HashSet<String> outAttributes = differentAttributes.get(differentAttributes.size() - 1);
+
+            // Mapa atrybut {wyjściowy : prawdopodobieństwo}.
+            HashMap<String, Double> probabilities = new HashMap<>();
+
+            // Wyliczenie prawdopodobieństw dla możliwych wyjść.
+            for (String outAttribute : outAttributes) {
+                // Zmienna przechowująca prawdopodobieństwo.
+                double probability = 1.0;
+
+                // Ilość atrybutów decyzyjnych w sumie.
+                final int decisionAttributesCount = trainFileLines.size();
+
+                // Ilość wystąpień dla danego atrybutu decyzyjnego.
+                final int outDecisionAttributeCount = getAttributeCount(outAttribute, testLine.length);
+
+                // Ilości wystąpień danych atrybutów pod danymi warunkami z wektora testowego.
+                // Lista nie musi być typu double, ale dla większej przejrzystości będzie typu double.
+                ArrayList<Double> attributeCountsUnderCondition = new ArrayList<>();
+                for (int i = 0; i < testLine.length; i++) {
+                    attributeCountsUnderCondition
+                            .add((double) getAttributeCountUnderCondition(testLine[i], i, outAttribute));
+                }
+
+                // Wyliczenie prawdopodobieństwa ze wzoru Bayesa.
+                probability *= ((double) outDecisionAttributeCount / (double) decisionAttributesCount);
+                final int dataSize = testLine.length;
+                for (int i = 0; i < dataSize; i++) {
+
+                    double part = (attributeCountsUnderCondition.get(i) / outDecisionAttributeCount);
+
+                    // Wygładzenie Laplace'a.
+                    if (part == 0) {
+                        part = ((attributeCountsUnderCondition.get(i) + 1)
+                                / (outDecisionAttributeCount + differentAttributes.get(i).size()));
+                    }
+
+                    probability *= part;
+                }
+
+                // Dodanie do mapy prawdopodobieństw.
+                probabilities.put(outAttribute, probability);
+            }
+
+            // Ustalenie najwyższego prawdopodobieństwa z mapy prawdopodobieństw.
+            final String res = Collections.max(probabilities.entrySet(), Map.Entry.comparingByValue()).getKey();
+
+            // Wypisanie wyniku.
+            System.out.println(STR."For vector : \{testFileLine} : computed result : \{res}");
         }
 
+    }
+
+    private int getAttributeCount(String attribute, int index) {
+        int count = 0;
+
+        for (String trainFileLine : trainFileLines) {
+            final String[] trainLine = trainFileLine.split(",");
+
+            if (trainLine[index].contains(attribute)) {
+                count += 1;
+            }
+        }
+
+        return count;
+    }
+
+    private int getAttributeCountUnderCondition(String attribute, int attribIndex, String conditionAttribute) {
+        int count = 0;
+
+        for (String trainFileLine : trainFileLines) {
+            final String[] trainLine = trainFileLine.split(",");
+
+            if (trainLine[attribIndex].equals(attribute) && trainLine[trainLine.length - 1].equals(conditionAttribute)) {
+                count += 1;
+            }
+        }
+
+        return count;
     }
 }
