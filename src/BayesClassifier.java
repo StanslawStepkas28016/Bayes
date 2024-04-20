@@ -31,23 +31,6 @@ public class BayesClassifier {
         }
     }
 
-    /*
-     * LOGIKA DZIAŁANIA:
-     * 1. Wczytaj jakoś dane z train-set.
-     * 2. Wprowadź wektor testowy np. X=(overcast,hot,high,true), (nie ma piątego paramteru — tego decyzyjnego).
-     * 3. Oblicz p. dla parametru decyzyjnego A i dla parametru decyzyjnego B, zwróć parametr, dla którego p. jest większe.
-     *
-     * SZCZEGÓŁY IMPLEMENTACYJNE:
-     * - Obliczenie p. dla wektora X=(overcast,hot, high,true) dla paramteru decyzyjnego A, odbywa się w sposób następujący,
-     * P(A|X) = (ilość wystąpień A w train-set / ilość wszystkich zdarzeń w train-set) * (ilość wystąpień "overcast" razem z A / ilość wystąpień overcast).
-     * Analogicznie dzieje się to dla każdego kolejnego atrybutu, a następnie dla paramteru decyzyjnego B.
-     * - Porównanie, które p. jest większe p(A) ? p(B), jeżeli p(A) > p(B), to zwracamy A, analogicznie, jeżeli jest na odwrót.
-     *
-     * WYJĄTKI:
-     * - Jeżeli jakieś p. cząstkowe (pojedyncze), wychodzi 0, zastosuj wygładzenie (korzystamy wtedy z differentAttributes,
-     * żeby pozyskać ilość różnych atrybutów, dla konkretnych parametrów, którą dodamy do mianownika),
-     * */
-
     public void testUsingTestSet(String testSetPath) {
         // Przeczytanie zawartości pliku testowego.
         final List<String> testFileLines = IOUtility.readFromPath(testSetPath);

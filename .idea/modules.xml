@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Bayes.iml" filepath="$PROJECT_DIR$/Bayes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BayesClassifier.iml" filepath="$PROJECT_DIR$/BayesClassifier.iml" />
     </modules>
   </component>
 </project>
