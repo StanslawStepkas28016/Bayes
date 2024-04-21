@@ -31,10 +31,7 @@ public class BayesClassifier {
         }
     }
 
-    public void testUsingTestSet(String testSetPath) {
-        // Przeczytanie zawartości pliku testowego.
-        final List<String> testFileLines = IOUtility.readFromPath(testSetPath);
-
+    public void test(List<String> testFileLines) {
         // Iterowanie przez dane testowe.
         for (String testFileLine : testFileLines) {
             final String[] testLine = testFileLine.split(",");
